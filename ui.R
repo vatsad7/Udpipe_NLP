@@ -33,7 +33,7 @@ shinyUI(fluidPage(
   checkboxGroupInput("checkGroup", label = h4("XPOS Selection"), 
                      choices = list("Adjective" = 1, "Noun" = 2, "Proper Noun" = 3,"Adverb" = 4,"Verb"=5),
                      selected = list(1,2,3)),
-  
+  fluidRow(column(5, verbatimTextOutput("checkbox"))),
   tags$hr(),
   
   submitButton(text = "Apply Changes", icon("refresh"))
@@ -46,7 +46,7 @@ shinyUI(fluidPage(
                          h4(p("Data input")),
                          p("This app supports only text file",align="justify"),
                          p("Please refer to the link below for sample text file."),
-                         a(href="https://github.com/sudhir-voleti/sample-data-sets/blob/master/Segmentation%20Discriminant%20and%20targeting%20data/ConneCtorPDASegmentation.csv"
+                         a(href="https://raw.githubusercontent.com/vatsad7/Udpipe_NLP/master/sample.txt"
                            ,"Sample data input file"),   
                          br(),
                          h4('How to use this App'),
@@ -55,6 +55,13 @@ shinyUI(fluidPage(
                            'and upload the text file. You can upload an udpipe file for different languages and also modify the Part of Speech'),
                 verbatimTextOutput("start")),  
                 
+                tabPanel("Udpipe Models",
+                         (p("Refer to the below links for Udpipe models in different languages")),
+                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/english-ud-2.0-170801.udpipe?raw=true
+                            ","English --> Udpipe Model"),
+                          br(),
+                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/hindi-ud-2.0-170801.udpipe?raw=true","Hindi --> Udpipe Model")
+                         ),
                 tabPanel("Co-occurence plot", 
                          plotOutput('plot1')
                          )
