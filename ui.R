@@ -58,9 +58,9 @@ shinyUI(fluidPage(
                 tabPanel("Udpipe Models",
                          (p("Refer to the below links for Udpipe models in different languages")),
                           a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/english-ud-2.0-170801.udpipe?raw=true
-                            ","English --> Udpipe Model"),
+                            ","English - Udpipe Model"),
                           br(),
-                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/hindi-ud-2.0-170801.udpipe?raw=true","Hindi --> Udpipe Model")
+                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/hindi-ud-2.0-170801.udpipe?raw=true","Hindi - Udpipe Model")
                          ),
                 tabPanel("Co-occurence plot", 
                          plotOutput('plot1')
