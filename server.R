@@ -30,41 +30,39 @@ shinyServer(function(input, output,session) {
       Document <- readLines(input$file1$datapath)
       corpus = readLines(Document)
       corpus  =  str_replace_all(corpus, "<.*?>", "")
-      return(corpus)}
+      corpus
+      }
   })
   
   model_trained <- reactive({
-    english_model = udpipe_load_model(input$model$datapath)  # file_model only needed
+    english_model = udpipe_load_model(input$file2$datapath)  # file_model only needed
     # now annotate text dataset using ud_model above
     # system.time({   # ~ depends on corpus size
-    x <- udpipe_annotate(english_model, x = english_model)#%>% as.data.frame() %>% head()
+    x <- udpipe_annotate(english_model, x = textfile())#%>% as.data.frame() %>% head()
     x <- as.data.frame(x)
-    return(x)
+    x
     })
   
-  cooccurence_plot <- reactive ({
-    text_colloc <- keywords_collocation(x = model_trained,   # try ?keywords_collocation
-                                        term = "token",group = c("doc_id", "paragraph_id", "sentence_id"),
-                                        ngram_max = 4) 
-    text_cooc <- cooccurrence(# try `?cooccurrence` for parm options
-      x = subset(model_trained, upos %in% c(input$checkGroup)), 
-      term = "lemma", 
-      group = c("doc_id", "paragraph_id", "sentence_id"))
-    
-    wordnetwork <- head(text_cooc, 30)
-    wordnetwork <- igraph::graph_from_data_frame(wordnetwork) # needs edgelist in first 2 colms.
-    cooccurence_graph <- ggraph(wordnetwork, layout = "fr") +  
-      geom_edge_link(aes(width = cooc, edge_alpha = cooc), edge_colour = "orange") +  
-      geom_node_text(aes(label = name), col = "darkgreen", size = 4) +
-      theme_graph(base_family = "Arial Narrow") +  
-      theme(legend.position = "none") +
-      labs(title = "Cooccurrences within 3 words distance")
-    return(cooccurence_graph)
-    
-  })
   
-  output$plot1  <- renderPlot({
-    cooccurence_plot    
+  
+  output$plot1  <- renderPlot ({
+      text_colloc <- keywords_collocation(x = model_trained(),   # try ?keywords_collocation
+                                          term = "token",group = c("doc_id", "paragraph_id", "sentence_id"),
+                                          ngram_max = 4) 
+      text_cooc <- cooccurrence(# try `?cooccurrence` for parm options
+        x = subset(model_trained(), upos %in% c("NOUN", "ADJ")), 
+        term = "lemma", 
+        group = c("doc_id", "paragraph_id", "sentence_id"))
+      
+      wordnetwork <- head(text_cooc, 30)
+      wordnetwork <- igraph::graph_from_data_frame(wordnetwork) # needs edgelist in first 2 colms.
+      cooccurence_graph <ggraph(wordnetwork, layout = "fr") +  
+        geom_edge_link(aes(width = cooc, edge_alpha = cooc), edge_colour = "orange") +  
+        geom_node_text(aes(label = name), col = "darkgreen", size = 4) +
+        theme_graph(base_family = "Arial Narrow") +  
+        theme(legend.position = "none") +
+        labs(title = "Cooccurrences within 3 words distance")  
+      cooccurence_graph
     
     })
     })
