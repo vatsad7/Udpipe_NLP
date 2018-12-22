@@ -17,23 +17,21 @@ shinyUI(fluidPage(
   sidebarLayout( 
     sidebarPanel(  
   #Upload data
-  fileInput("file1", "Upload any text file for analysis",multiple = FALSE,
-            accept = c("text",
-                       "text/plain",
-                       ".txt")), 
+  fileInput("file", "Upload any text file for analysis"), 
   
   tags$hr(),
   
-  #Upload data
-  fileInput("file2", "Upload any udpipe trained model file for any language",multiple = FALSE), 
+  selectInput("select", label = h3("Select box"), 
+              choices = list("English" = "english", "Spanish" = "spanish", "Hindi" = "hindi"), 
+              selected = "english"),
   
-  tags$hr(),
+  hr(),
   
   #Part of Speech Checkboxes
-  checkboxGroupInput("checkGroup", label = h4("XPOS Selection"), 
-                     choices = list("Adjective" = 1, "Noun" = 2, "Proper Noun" = 3,"Adverb" = 4,"Verb"=5),
-                     selected = list(1,2,3)),
-  fluidRow(column(5, verbatimTextOutput("checkbox"))),
+  checkboxGroupInput("checkGroup", label = h4("UPOS Selection"), 
+                     choices = list("Adjective" = "ADJ", "Noun" = "NOUN", "Proper Noun" = "PROPN","Adverb" = "ADV","Verb"="VERB"),
+                     selected = c("ADJ","NOUN","PROPN")),
+  #fluidRow(column(5, verbatimTextOutput("checkbox"))),
   tags$hr(),
   
   submitButton(text = "Apply Changes", icon("refresh"))
@@ -52,19 +50,32 @@ shinyUI(fluidPage(
                          h4('How to use this App'),
                          p('To use this app, click on', 
                            span(strong("Upload any text file for analysis")),
-                           'and upload the text file. You can upload an udpipe file for different languages and also modify the Part of Speech'),
-                verbatimTextOutput("start")),  
+                           'and upload the text file. You can select any language from the dropdown menu and also modify the Part of Speech'),
+                        p('App also creates word clouds for different parts of speech'),
+                                         verbatimTextOutput("start")),  
                 
                 tabPanel("Udpipe Models",
                          (p("Refer to the below links for Udpipe models in different languages")),
                           a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/english-ud-2.0-170801.udpipe?raw=true
-                            ","English - Udpipe Model"),
+                            ","English --> Udpipe Model"),
                           br(),
-                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/hindi-ud-2.0-170801.udpipe?raw=true","Hindi - Udpipe Model")
+                          a(href="https://github.com/vatsad7/Udpipe_NLP/blob/master/hindi-ud-2.0-170801.udpipe?raw=true","Hindi --> Udpipe Model")
                          ),
                 tabPanel("Co-occurence plot", 
                          plotOutput('plot1')
-                         )
+                         ),
+                
+                tabPanel("Word Clouds",
+                         h3("Adjective"),
+                         plotOutput('wc1'),
+                         h3("Noun"),
+                         plotOutput('wc2'),
+                         h3("Proper Noun"),
+                         plotOutput('wc3'),
+                         h3("Adverb"),
+                         plotOutput('wc4'),
+                         h3("Verb"),
+                         plotOutput('wc5'))
     ))# end of tabsetPanel
   )# end of main panel
 )
