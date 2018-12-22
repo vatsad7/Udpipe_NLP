@@ -7,6 +7,15 @@
 #    http://shiny.rstudio.com/
 #
 
+##################
+#Name: Abhilash Mishra
+#PGID 11810021
+#Name: Suryakant Mohanty
+#PGID 11810045
+#Name : Shubhendra Singh Vatsa
+#PGID 11810059
+##################
+
 library(shiny)
 library(igraph)
 library(ggraph)
